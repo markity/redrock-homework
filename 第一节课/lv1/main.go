@@ -2,6 +2,7 @@ package main
 
 import (
 	"bufio"
+	"fmt"
 	"io"
 	"log"
 	"os"
@@ -27,5 +28,9 @@ func main() {
 			os.Exit(0)
 		}
 	}
-	println("是回文")
+	if len(input)%2 != 0 {
+		fmt.Printf("是回文: %s\n", string(rInput[:len(rInput)/2+1]))
+	} else {
+		fmt.Printf("是回文: %s\n", string(rInput[:len(rInput)/2]))
+	}
 }
