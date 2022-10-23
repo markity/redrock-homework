@@ -119,7 +119,7 @@ func main() {
 		case "4":
 			os.Exit(0)
 		default:
-			println("非法从操作, 重新输入")
+			println("非法操作, 重新输入")
 		}
 	}
 }
