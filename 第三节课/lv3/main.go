@@ -1,6 +1,8 @@
 package main
 
 import (
+	"fmt"
+	"io/ioutil"
 	"log"
 	"os"
 )
@@ -16,4 +18,16 @@ func main() {
 	if err != nil {
 		log.Fatalln(err)
 	}
+
+	_, err = f.Seek(0, 0)
+	if err != nil {
+		log.Fatalln(err)
+	}
+
+	r, err := ioutil.ReadAll(f)
+	if err != nil {
+		log.Fatalln(err)
+	}
+
+	fmt.Printf("%s\n", string(r))
 }
