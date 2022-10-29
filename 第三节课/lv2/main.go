@@ -11,17 +11,17 @@ var c chan struct{} = make(chan struct{})
 
 func PrintJ(wg *sync.WaitGroup) {
 	for {
-		// 奇数先打, 打了等待对方执行完毕
+		// 奇数先打印, 然后通知另一个携程打印
 		fmt.Println(count)
 		count++
+		// 发送完毕后等待对方发送信号
+		c <- struct{}{}
+
 		// 退出携程
 		if count == 100 {
-			c <- struct{}{}
 			wg.Done()
 			return
 		}
-		// 发送完毕后等待对方发送信号
-		c <- struct{}{}
 		<-c
 	}
 }
