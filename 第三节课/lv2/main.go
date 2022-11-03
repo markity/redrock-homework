@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"sync"
 )
 
@@ -10,31 +9,35 @@ var count int = 1
 var c chan struct{} = make(chan struct{})
 
 func PrintJ(wg *sync.WaitGroup) {
+	a := 1
 	for {
-		// 奇数先打印, 然后通知另一个携程打印
-		fmt.Println(count)
-		count++
-		// 发送完毕后等待对方发送信号
-		c <- struct{}{}
-
-		// 退出携程
-		if count == 100 {
+		// 奇数先开始
+		println(a)
+		if a == 99 {
+			c <- struct{}{}
 			wg.Done()
 			return
 		}
+		a += 2
+
+		c <- struct{}{}
+
 		<-c
 	}
 }
 
 func PrintO(wg *sync.WaitGroup) {
+	b := 2
 	for {
 		// 偶数后打, 收到信号之后向对方发送信号
 		<-c
-		fmt.Println(count)
-		if count == 100 {
+		println(b)
+		if b == 100 {
 			wg.Done()
 			return
 		}
+		b += 2
+
 		c <- struct{}{}
 	}
 }
