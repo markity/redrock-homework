@@ -1,11 +1,10 @@
 package main
 
 import (
-	"fmt"
 	"time"
 )
 
-func getSoleTick(t time.Duration) chan struct{} {
+func getSoleTicker(t time.Duration) chan struct{} {
 	c := make(chan struct{})
 	go func() {
 		time.Sleep(t)
@@ -26,7 +25,7 @@ type dailyScheduler struct {
 func (d dailyScheduler) Run() (func(), func()) {
 	// 如果今天的时间已经过了规定时间, 那么等明天
 	now := time.Now().Local()
-	// temp假设如果没过今天, 那么应该回调的时间是多少
+	// temp假设如果调用的时机为今天, 之后判断是否应该为今天调度
 	temp := time.Date(now.Year(), now.Month(), now.Day(), d.hour, d.min, d.second, 0, time.Local)
 	// 回调的真实时间
 	var ringDate time.Time
@@ -35,13 +34,15 @@ func (d dailyScheduler) Run() (func(), func()) {
 		// 如果明天才响应, 那么temp += 1 day
 		ringDate = temp.Add(time.Hour * 24)
 	} else {
+		// 如果今天就该响应, 那么ringDate = temp
 		ringDate = temp
 	}
+
 	// 休眠时间
 	interval := ringDate.Sub(now)
 
 	// 创建定时器channel
-	timeChan := getSoleTick(interval)
+	timeChan := getSoleTicker(interval)
 	// 创建取消channel
 	cancelChan := make(chan struct{})
 	// 创建跳过一次channel
@@ -54,7 +55,7 @@ func (d dailyScheduler) Run() (func(), func()) {
 			select {
 			case <-timeChan:
 				go d.f()
-				timeChan = getSoleTick(time.Hour * 24)
+				timeChan = getSoleTicker(time.Hour * 24)
 				nextRing.Add(time.Hour * 24)
 			case <-cancelChan:
 				close(cancelChan)
@@ -63,11 +64,7 @@ func (d dailyScheduler) Run() (func(), func()) {
 			case <-jumpOne:
 				nextRing = nextRing.Add(time.Hour * 24)
 				interval := nextRing.Sub(time.Now().Local())
-				fmt.Println(interval)
-				timeChan = getSoleTick(interval)
-			case <-cancelChan:
-				close(cancelChan)
-				return
+				timeChan = getSoleTicker(interval)
 			}
 		}
 	}()

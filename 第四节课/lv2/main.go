@@ -28,6 +28,10 @@ func main() {
 		println("10s过去了")
 	}).Run()
 
+	// 可以让10s的tiker进行三次后关闭
+	time.Sleep(time.Second * 31)
+	cancel4()
+
 	c := make(chan os.Signal, 1)
 	signal.Notify(c, syscall.SIGINT, syscall.SIGTERM)
 
@@ -36,6 +40,5 @@ func main() {
 	cancel1()
 	cancel2()
 	cancel3()
-	cancel4()
 	println("程序结束")
 }
