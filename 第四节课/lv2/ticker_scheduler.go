@@ -1,6 +1,8 @@
 package main
 
-import "time"
+import (
+	"time"
+)
 
 type tickerScheduler struct {
 	t time.Duration
