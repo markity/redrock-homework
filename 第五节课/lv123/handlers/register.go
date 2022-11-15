@@ -1,7 +1,8 @@
 package handlers
 
 import (
-	"lv1/utils"
+	"log"
+	"lv123/utils"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -67,7 +68,9 @@ func RegisterPost(c *gin.Context) {
 	acode := utils.ToMD5(pwd)
 	utils.UserAuthMap[uname] = acode
 	utils.Mu.Unlock()
-	utils.FlushFile()
+	if err := utils.FlushFile(); err != nil {
+		log.Printf("failed to sync file: %v\n", err)
+	}
 
 	// 设置cookie
 	c.SetCookie("username", uname, 3600, "/", "localhost", false, false)

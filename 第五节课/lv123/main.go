@@ -1,8 +1,8 @@
 package main
 
 import (
-	"lv1/handlers"
-	"lv1/utils"
+	"lv123/handlers"
+	"lv123/utils"
 
 	"github.com/gin-gonic/gin"
 )

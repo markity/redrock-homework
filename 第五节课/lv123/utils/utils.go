@@ -51,7 +51,7 @@ func InitUserAuthMap() {
 	}
 
 	if err := json.Unmarshal(data, &UserAuthMap); err != nil {
-		log.Fatalf("failed to unmarshal json data:%v\n", err)
+		log.Fatalf("failed to unmarshal json data: %v\n", err)
 	}
 }
 

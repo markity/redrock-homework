@@ -1,7 +1,7 @@
 package handlers
 
 import (
-	"lv1/utils"
+	"lv123/utils"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
