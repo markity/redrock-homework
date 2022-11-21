@@ -1,0 +1,102 @@
+{{ define "mainpage.tmpl" }}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>留言板</title>
+    <style>
+        .noresize {
+            resize: none;
+        }
+        .noinputandresize {
+            resize: none;
+            
+        }
+        .root {
+            display: flex;
+            flex-direction: column;
+            width: 320px;
+            height: 180px;
+            margin: auto;
+        }
+        .center {
+            display: flex;
+            flex-direction: column;
+            width: 320px;
+            height: 50px;
+            margin: auto;
+        }
+        .comment {
+            resize: none;
+            display: flex;
+            flex-direction: column;
+            width: 320px;
+            height: 180px;
+            margin: auto;
+        }
+        .recomment {
+            resize: none;
+            display: flex;
+            flex-direction: column;
+            width: 320px;
+            height: 80px;
+            margin: auto;
+        }
+
+        #content {
+            border: 1px solid #000;
+            border-radius: 4px;
+            flex-grow: 1;
+            overflow: hidden;
+        }
+
+        li {
+            display: flex;
+            align-items: center;
+            height: 24px;
+            margin: 2px 0;
+        }
+
+        li p {
+            flex-grow: 1;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div>
+        <p class="center">你好, {{ .user.Username }}, 你可以在下面留言或回复他人的留言, 最多256个字符</p>
+        <form method="post" class="root">
+            <input type="text" name="post_type" value="new_comment" hidden>
+            <textarea id="content" class="noresize" name="new_comment" maxlength="256"></textarea>
+            <input class="send" type="submit" value="发送">
+        </form>
+    </div>
+
+    <div>
+        {{ range $k, $v := .topcomments }}
+        <hr>
+        <p class="center">{{ $v.Owner }}在{{ $v.CreatedAt }}留言:</p>
+        <textarea class="comment" readonly="readonly">{{ $v.Content }}</textarea>
+            {{ range $s, $d := $v.SonComments }}
+            <p class="center">{{ $d.Owner }}在{{ $d.CreatedAt }}回复:</p>
+            <p class="center">{{ $d.Content }}</p>
+            {{ end }}
+        <p class="center">你可以添加新的回复(最多50字):</p>
+        <form method="post" class="root">
+            <input type="text" name="post_type" value="append_comment" hidden>
+            <input type="text" name="append_id" value="{{ $v.CommentID }}" hidden>
+            <textarea id="content" class="noresize" name="append_comment" maxlength="50"></textarea>
+            <input class="send" type="submit" value="追评">
+        </form>
+        {{ end }}
+    </div>
+
+</body>
+
+</html>
+{{ end }}
