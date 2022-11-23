@@ -8,7 +8,6 @@ import (
 
 // be warpped by auth middleware
 func logoutGet(ctx *gin.Context) {
-	println(12312312)
 	ctx.SetCookie("username", "", -1, "/", "localhost", false, false)
 	ctx.SetCookie("authcode", "", -1, "/", "localhost", false, false)
 	ctx.HTML(http.StatusOK, "logout_success.tmpl", nil)

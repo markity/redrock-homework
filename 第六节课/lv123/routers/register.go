@@ -48,13 +48,11 @@ func registerPost(ctx *gin.Context) {
 		err != nil ||
 		!tools.CheckSecurityAnswerValid(securityAnswer) {
 
-		println(1)
 		ctx.HTML(http.StatusBadRequest, "wrong_register_input.tmpl", nil)
 		return
 	}
 	_, ok := tools.Num2SecurityQuestion(securityChoiceNum)
 	if !ok {
-		println(5)
 		ctx.HTML(http.StatusBadRequest, "wrong_register_input.tmpl", nil)
 		return
 	}

@@ -15,7 +15,6 @@ import (
 // if a user does not logined in, redirect to login page
 func GetMiddlewareMustLoginedIn(db *sql.DB, destAddr string) func(*gin.Context) {
 	return func(ctx *gin.Context) {
-		println("fuck")
 		username, err1 := ctx.Cookie("username")
 
 		// authcode is not user's password, is is the md5 digest of user's password
@@ -32,7 +31,6 @@ func GetMiddlewareMustLoginedIn(db *sql.DB, destAddr string) func(*gin.Context) 
 
 		// check the legality of username and authcode, reduce the pressure of the database
 		if !tools.CheckUsernameValid(username) || !tools.CheckAuthcodeValid(authcode) {
-			println("re2")
 			ctx.Redirect(http.StatusTemporaryRedirect, destAddr)
 			ctx.Abort()
 
@@ -48,13 +46,11 @@ func GetMiddlewareMustLoginedIn(db *sql.DB, destAddr string) func(*gin.Context) 
 
 		// user authcode invalid, redirect
 		if user == nil || (user.AuthCode != authcode) {
-			println("re3")
 			ctx.Redirect(http.StatusTemporaryRedirect, destAddr)
 			ctx.Abort()
 			return
 		}
 
-		println("aqq")
 		// ok, logined in, pass it to next middleware
 		// and need to update cookie expire time to keep seesion active
 		ctx.SetCookie("username", username, 3600, "/", "localhost", false, false)

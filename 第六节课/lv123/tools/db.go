@@ -47,14 +47,14 @@ func TryGetUserByUsername(username string) (*User, error) {
 	var user User
 	rows, err := db.Query("SELECT id, username, password_md5, created_at FROM user WHERE username=?", username)
 	if err != nil {
-		println(err)
+		log.Printf("failed to Query: %v\n", err)
 		return nil, err
 	}
 	var data []byte
 	if rows.Next() {
 		if err := rows.Scan(&user.ID, &user.Username, &data, &user.CreatedAt); err != nil {
 			if err != nil {
-				println(err)
+				log.Printf("failed to Query: %v\n", err)
 			}
 			return nil, err
 		}

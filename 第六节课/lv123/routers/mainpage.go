@@ -1,7 +1,6 @@
 package routers
 
 import (
-	"fmt"
 	"log"
 	"net/http"
 	"project6/tools"
@@ -33,8 +32,6 @@ func mainPageGet(ctx *gin.Context) {
 		allUserComments = append(allUserComments, tmpUserComment)
 	}
 
-	fmt.Println(allUserComments)
-
 	// fill renderComments
 	for _, v := range allUserComments {
 		// if it is a top comment, put it in renderComments
@@ -46,7 +43,6 @@ func mainPageGet(ctx *gin.Context) {
 				CreatedAt:   v.CreatedAt,
 				SonComments: make([](*tools.CommentForRender), 0),
 			}
-			println("append")
 			renderComments = append(renderComments, &tmpRenderComment)
 			m[v.CommentID] = &tmpRenderComment.SonComments
 		} else {
@@ -56,23 +52,7 @@ func mainPageGet(ctx *gin.Context) {
 				CreatedAt:   v.CreatedAt,
 				SonComments: nil,
 			}
-			fmt.Println("parent:", *v.Parent)
 			(*m[*v.Parent]) = append((*m[*v.Parent]), &tmpRenderComment)
-		}
-	}
-
-	fmt.Println(allUserComments)
-	for _, v := range renderComments {
-		fmt.Println(v.Content)
-		fmt.Println(v.CreatedAt)
-		fmt.Println(v.Owner)
-		fmt.Println(v.SonComments)
-		println("sons:")
-		for _, x := range v.SonComments {
-			fmt.Println(x.Content)
-			fmt.Println(x.CreatedAt)
-			fmt.Println(x.Owner)
-			fmt.Println(x.SonComments)
 		}
 	}
 
