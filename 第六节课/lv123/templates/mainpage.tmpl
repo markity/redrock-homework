@@ -70,6 +70,8 @@
 
     <div>
         <p class="center">你好, {{ .user.Username }}, 你可以在下面留言或回复他人的留言, 最多256个字符</p>
+        <a href="/changepwd" class="center">点击此处重置密码</a>
+        <a href="/logout" class="center">点击此处注销账户</a>
         <form method="post" class="root">
             <input type="text" name="post_type" value="new_comment" hidden>
             <textarea id="content" class="noresize" name="new_comment" maxlength="256"></textarea>
