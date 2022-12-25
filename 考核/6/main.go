@@ -26,6 +26,9 @@ CREATE TABLE borrowing_records(
 book_status 0 代表未归还但未逾期
 			1 代表已归还
 			2 代表未归还已经逾期
+
+
+预处理语句可以减少处理时间，提交效率
 */
 
 func main() {
